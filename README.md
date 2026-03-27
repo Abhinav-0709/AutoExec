@@ -1,69 +1,90 @@
-# AutoExec Enterprise (Meeting-to-Execution System)
+# AutoExec: Enterprise Meeting-to-Execution Engine 🚀
 
-AutoExec Enterprise is a completely autonomous system built to orchestrate, extract, delegate, and aggressively recover tasks born from standard meeting transcripts or direct inputs. 
+AutoExec is a high-performance, autonomous agentic system designed to transform meeting transcripts into actionable enterprise tasks. It leverages **LangGraph** for resilient multi-agent orchestration and **Gemini 2.5 Flash** for high-accuracy audio transcription and intent extraction.
 
-This full-stack environment features a sleek Glassmorphic React (Next.js) real-time dashboard powered by an autonomous Multi-Agent LangGraph + FastAPI backend.
+## 🏗️ Architecture: Multi-Agent Orchestration
+The system follows a directed acyclic graph (DAG) structure, separating concerns across specialized agents:
+- **Extractor Agent**: Identifies core decisions and context from raw transcripts.
+- **Planner Agent**: Generates structured `PlannedTask` objects with owners, priorities, and deadlines.
+- **Executor Agent**: Performs the heavy lifting (simulated CRM updates/real email dispatch via Resend).
+- **Monitor Agent**: A safety governor that handles real-time execution health checks.
+- **Escalation Agent**: Implements "Self-Healing" by routing failed tasks for retry or human review.
+- **Verifier/Notifier Agents**: Validates output quality and notifies stakeholders.
+
+## 🛠️ Tech Stack
+- **Backend**: FastAPI, SQLAlchemy (Async), LangGraph, Pydantic, SQLite.
+- **Frontend**: Next.js 16 (App Router), Tailwind CSS 4, Framer Motion, Lucide Icons.
+- **AI/LLM**: Google Gemini 2.5 Flash (via `google-generativeai`).
+- **Infrastructure**: Resend API (for automated email dispatch).
 
 ---
 
-## What It Automatically Does
+## 🚀 Setup Instructions
 
-1. **Extracts:** Identifies core decisions and actions from noisy meetings.
-2. **Plans:** Dynamically scales actions into granular tasks.
-3. **Executes:** Fulfills operations and delegates tasks with a 100% precision target.
-4. **Monitors & Recovers (Escalation Engine):** Constantly monitors API endpoints. When an execution predictably fails (simulated), the LLMs automatically halt it, isolate the blocker, and trigger a surgical **Retry** loop specifically to achieve total task completion, exactly matching enterprise SLAs.
-
----
-
-## 🚀 Setup & Execution 
-
-It takes less than 2 minutes to spin up the entire system.
-
-### Prerequisites
-- Node.js (v18+)
+### 1. Prerequisites
 - Python 3.10+
+- Node.js 18+
+- [Google AI Studio API Key](https://aistudio.google.com/)
+- [Resend API Key](https://resend.com/) (Optional, for real email testing)
 
----
-
-### Step 1: Clone & Configure Backend
-Navigate to the root directory and install your Python dependencies inside your environment:
+### 2. Backend Setup
 ```bash
+# Clone the repository
+git clone https://github.com/Abhinav-0709/AutoExec.git
+cd AutoExec
+
+# Create and activate virtual environment
 python -m venv venv
-venv\Scripts\activate   # (Windows)
-# source venv/bin/activate (Mac/Linux)
+./venv/Scripts/activate
 
+# Install dependencies
 pip install -r requirements.txt
-```
 
-Set up your `.env` file at the root. You must populate your primary Google AI (Gemini) Key.
-```bash
-# .env
-GOOGLE_API_KEY="your-gemini-key"
-DATABASE_URL="sqlite+aiosqlite:///./test.db"
-```
+# Configure environment
+# Create a .env file in the root:
+# GOOGLE_API_KEY=your_gemini_key
+# RESEND_API_KEY=your_resend_key
+# DEMO_TARGET_EMAIL=your_test_email
 
-Start the FastAPI / LangGraph Server:
-```bash
+# Start the server
 python -m uvicorn main:app --port 8000 --reload
 ```
----
 
-### Step 2: Configure the Display Frontend
-Open a **new terminal tab** and navigate perfectly into the `frontend` folder.
-
+### 3. Frontend Setup
 ```bash
 cd frontend
+
+# Install dependencies
 npm install
+
+# Start the dashboard
 npm run dev
+```
+The application will be available at `http://localhost:3000`.
+
+---
+
+## 📜 Build Process: Commit History
+The project was built over an 18-hour intensive development sprint. Below is the verified build trace:
+
+```text
+* fix: switch to gemini-2.5-flash and finalize build
+* chore: add model diagnosis and testing scripts
+* feat: design responsive dashboard with Lucide icons and Framer Motion
+* style: add global styles and root layout configuration
+* feat: implement LangGraph agent orchestration logic
+* feat: initial FastAPI server setup with basic endpoints
+* feat: add database operations and initialization scripts
+* feat: implement database connection and ORM models
+* Initial commit: environment and ignore setup
 ```
 
 ---
 
-### Step 3: Run the Dashboard
-Navigate your browser to `http://localhost:3000`. 
-1. The **AutoExec Input** waits on the left lane.
-2. Paste any team discussion snippet.
-3. Click **Extract & Execute**.
-4. Witness the LLM system immediately fire the tasks, watch metrics populate instantly in the Impact Panel, and visually verify the exact moment the Escalation Agent identifies and safely remediates a catastrophic task failure.
+## 📊 Evaluation Metrics
+- **Autonomy**: Tier-2 Autonomous (Supports full-loop and Human-in-the-loop modes).
+- **Auditability**: 100% Traceable (Reasoning and Confidence scores stored for every decision).
+- **Resilience**: Integrated Escalation & Recovery logic for failed agent nodes.
 
-Enjoy the demo!
+---
+*Developed as a high-performance demonstration of Agentic Workflows.*
