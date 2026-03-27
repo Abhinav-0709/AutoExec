@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+langgraph[compat]
+langchain-google-genai
+langchain-groq
+langchain-core
+sqlalchemy
+asyncpg
+psycopg2-binary
+python-dotenv
+pydantic
+aiosqlite
+resend
