@@ -16,36 +16,7 @@ The system follows a directed acyclic graph (DAG) structure, separating concerns
 
 The following diagram illustrates the autonomous decision-making loop and the multi-agent orchestration managed by **LangGraph**.
 
-```mermaid
-graph TD
-    A[Audio/Transcript Input] --> B(Extractor Agent)
-    B -->|Context & Decisions| C(Planner Agent)
-    C -->|Structured Plan| D{Approval Mode}
-    
-    D -->|Manual| E[Human Approval]
-    D -->|Auto| F(Executor Agent)
-    E -->|Approved| F
-    
-    F -->|Result| G(Monitor Agent)
-    G -->|Failure/Error| H(Escalation Agent)
-    H -->|Recovery| F
-    G -->|Success| I(Verifier Agent)
-    
-    I --> J(Notifier Agent)
-    J --> K[Final Output / Email Sent]
-
-    subgraph "External Integrations"
-        L[Gemini File API] -.-> B
-        M[Resend API] -.-> F
-        N[SQLAlchemy DB] -.-> G
-    end
-
-    style B fill:#3b82f6,stroke:#fff,stroke-width:2px,color:#fff
-    style C fill:#3b82f6,stroke:#fff,stroke-width:2px,color:#fff
-    style F fill:#10b981,stroke:#fff,stroke-width:2px,color:#fff
-    style G fill:#f59e0b,stroke:#fff,stroke-width:2px,color:#fff
-    style H fill:#ef4444,stroke:#fff,stroke-width:2px,color:#fff
-```
+![System Architecture Diagram](system_architecture_diagram.png)
 
 ### 🤖 Agent Roles & Communication
 1.  **Extractor Agent (Ingestion)**: 
