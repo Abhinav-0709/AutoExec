@@ -3,7 +3,7 @@ import random
 import os
 import resend
 from agents.state import WorkflowState
-from db_ops import add_log, update_task_statuses
+from db_ops import add_log, update_task_statuses, update_individual_task_status
 
 async def executor_agent(state: WorkflowState):
     workflow_id = state.get("workflow_id")
@@ -24,10 +24,13 @@ async def executor_agent(state: WorkflowState):
         escalated = state.get("escalated", False)
         
         # ~30% chance of a mock failure on first run for the demo
+        success = True
         if not escalated and random.random() < 0.3:
+            success = False
             fail_msg = f"Task '{task.task}' failed due to simulated timeout or CRM error."
             failed_reasons.append(fail_msg)
             await add_log(workflow_id, "Executor Agent", f"Task execution failed", details=fail_msg)
+            await update_individual_task_status(workflow_id, task.task, "failed")
         else:
             # Trigger Real Email if Resend setup exists
             resend.api_key = os.environ.get("RESEND_API_KEY")
@@ -46,6 +49,9 @@ async def executor_agent(state: WorkflowState):
                     await add_log(workflow_id, "Executor Agent", f"Task completed, but email dispatch failed: {str(e)}")
             else:
                 await add_log(workflow_id, "Executor Agent", f"Task completed successfully: {task.task}")
+            
+            # ALWAYS update to completed in DB if we reached here
+            await update_individual_task_status(workflow_id, task.task, "completed")
             
     execution_status = "failed" if failed_reasons else "completed"
     

@@ -39,3 +39,13 @@ async def update_task_statuses(workflow_id: int, status: str):
         for t in tasks:
             t.status = status
         await session.commit()
+
+async def update_individual_task_status(workflow_id: int, task_description: str, status: str):
+    async with AsyncSessionLocal() as session:
+        result = await session.execute(
+            select(Task).where(Task.workflow_id == workflow_id, Task.task_description == task_description)
+        )
+        task = result.scalars().first()
+        if task:
+            task.status = status
+            await session.commit()

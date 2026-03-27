@@ -1,49 +1,89 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #09090b;
-  --color-foreground: #fafafa;
-  --color-card: rgba(24, 24, 27, 0.4);
-  --color-card-border: rgba(255, 255, 255, 0.1);
+  --color-background: #030303;
+  --color-foreground: #ffffff;
+  --color-card: rgba(10, 10, 10, 0.4);
+  --color-card-border: rgba(255, 255, 255, 0.08);
   --color-primary: #3b82f6;
-  --color-primary-glow: rgba(59, 130, 246, 0.5);
+  --color-primary-glow: rgba(59, 130, 246, 0.4);
   --color-success: #10b981;
+  --color-success-glow: rgba(16, 185, 129, 0.3);
   --color-error: #ef4444;
+  --color-error-glow: rgba(239, 68, 68, 0.3);
   --color-warning: #f59e0b;
-  --font-sans: var(--font-geist-sans);
+  --color-warning-glow: rgba(245, 158, 11, 0.3);
+  --font-sans: var(--font-geist-sans), 'Outfit', sans-serif;
   --font-mono: var(--font-geist-mono);
+}
+
+@keyframes mesh-gradient {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(180deg); }
+  100% { transform: translateY(0) rotate(360deg); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.1); }
 }
 
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
-  background-image: 
-    radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.08), transparent 25%),
-    radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.08), transparent 25%);
-  background-attachment: fixed;
+  overflow-x: hidden;
+  position: relative;
   min-height: 100vh;
+}
+
+/* Premium Mesh Gradient Background */
+body::before {
+  content: "";
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    radial-gradient(circle at 70% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 30% 70%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+  z-index: -1;
+  animation: mesh-gradient 20s linear infinite;
 }
 
 .glass-panel {
   background: var(--color-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid var(--color-card-border);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 40px 0 rgba(0, 0, 0, 0.5);
+}
+
+.status-glow {
+  filter: blur(8px);
+  opacity: 0.5;
+  animation: pulse-glow 3s infinite;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.2);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
 }

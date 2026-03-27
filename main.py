@@ -3,6 +3,10 @@ import uuid
 import time
 import traceback
 import google.generativeai as genai
+
+# Silence LangGraph msgpack serialization warnings for custom agent types
+os.environ["LANGCHAIN_CHECKPOINT_ALLOWED_MSGPACK_MODULES"] = "agents.state"
+
 from fastapi import FastAPI, BackgroundTasks, HTTPException, Depends, File, UploadFile
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware

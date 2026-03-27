@@ -161,47 +161,55 @@ export default function Home() {
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-      case 'completed': return 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20';
+      case 'completed': return 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20 shadow-[0_0_15px_rgba(16,185,129,0.2)]';
       case 'failed':
       case 'error':
       case 'terminal_failure':
-      case 'escalated': return 'text-rose-400 bg-rose-400/10 border-rose-400/20';
+      case 'escalated': return 'text-rose-400 bg-rose-400/10 border-rose-400/20 shadow-[0_0_15px_rgba(244,63,94,0.2)]';
       case 'executing':
-      case 'running': return 'text-blue-400 bg-blue-400/10 border-blue-400/20';
-      case 'awaiting_approval': return 'text-amber-400 bg-amber-400/10 border-amber-400/20';
-      default: return 'text-zinc-400 bg-zinc-800 border-zinc-700';
+      case 'running': return 'text-blue-400 bg-blue-400/10 border-blue-400/20 shadow-[0_0_15px_rgba(59,130,246,0.2)]';
+      case 'awaiting_approval': return 'text-amber-400 bg-amber-400/10 border-amber-400/20 shadow-[0_0_15px_rgba(245,158,11,0.2)]';
+      default: return 'text-zinc-500 bg-white/5 border-white/5';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status.toLowerCase()) {
-      case 'completed': return <CheckCircle className="w-4 h-4" />;
+      case 'completed': return <CheckCircle className="w-3.5 h-3.5" />;
       case 'failed':
       case 'error':
       case 'terminal_failure':
-      case 'escalated': return <AlertTriangle className="w-4 h-4" />;
+      case 'escalated': return <AlertTriangle className="w-3.5 h-3.5" />;
       case 'executing':
-      case 'running': return <Loader2 className="w-4 h-4 animate-spin" />;
-      case 'awaiting_approval': return <Clock className="w-4 h-4" />;
-      default: return <Clock className="w-4 h-4" />;
+      case 'running': return <Loader2 className="w-3.5 h-3.5 animate-spin" />;
+      case 'awaiting_approval': return <Clock className="w-3.5 h-3.5" />;
+      default: return <Clock className="w-3.5 h-3.5" />;
     }
   };
   return (
     <main className="min-h-screen p-4 md:p-8 max-w-[1600px] mx-auto flex flex-col gap-6">
       
       {/* Header */}
-      <header className="flex items-center justify-between border-b border-white/10 pb-6 mb-2">
-        <div className="flex items-center gap-3 text-blue-500">
-          <Activity className="w-8 h-8" />
-          <h1 className="text-2xl font-bold tracking-tight text-white">AutoExec<span className="text-blue-500 text-sm font-medium tracking-normal ml-2 px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20">Enterprise</span></h1>
+      <header className="flex items-center justify-between border-b border-white/5 pb-6 mb-2">
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.5)]">
+            <Activity className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+              AutoExec
+              <span className="text-[10px] uppercase tracking-[0.2em] font-black px-2 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-400">Enterprise</span>
+            </h1>
+            <p className="text-zinc-500 text-xs font-medium">Autonomous Task Orchestration Engine</p>
+          </div>
         </div>
-        <div className="flex items-center gap-4 text-sm font-medium text-zinc-400">
-           <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${workflowStatus === 'running' ? 'bg-blue-500 animate-pulse' : workflowStatus === 'idle' ? 'bg-zinc-500' : 'bg-emerald-500'}`}></div>
-            Status: {workflowStatus.toUpperCase()}
+        <div className="flex items-center gap-6">
+           <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/5 shadow-inner">
+              <div className={`w-2 h-2 rounded-full ${workflowStatus === 'running' ? 'bg-blue-500 animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.8)]' : workflowStatus === 'idle' ? 'bg-zinc-600' : 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]'}`}></div>
+              <span className="text-xs font-bold tracking-widest text-zinc-400 uppercase">System: {workflowStatus || "IDLE"}</span>
           </div>
           {workflowStatus === "awaiting_approval" && (
-            <button onClick={handleApprove} className="bg-amber-500 hover:bg-amber-400 text-black px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-lg flex items-center gap-2 pulse-amber">
+            <button onClick={handleApprove} className="bg-amber-500 hover:bg-amber-400 text-black px-6 py-2 rounded-xl text-xs font-black transition-all shadow-[0_0_20px_rgba(245,158,11,0.4)] flex items-center gap-2 uppercase tracking-tight">
                <CheckCircle className="w-4 h-4" />
                Approve Execution
             </button>
@@ -211,37 +219,48 @@ export default function Home() {
 
       {/* Impact Metrics Panel */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-2">
-        <div className="glass-panel p-4 rounded-xl flex flex-col gap-1 relative overflow-hidden">
-           <div className="text-zinc-400 text-xs font-bold tracking-wider uppercase">Task Failure Rate</div>
-           <div className="flex items-end gap-2">
-              <span className={`text-2xl font-bold ${metrics.failureRate > 20 ? 'text-rose-400' : 'text-white'}`}>{metrics.failureRate}%</span>
-              <span className="text-zinc-500 text-xs font-medium mb-1">Impact Risk</span>
+        <div className="glass-panel p-5 rounded-2xl flex flex-col gap-2 relative overflow-hidden group">
+           <div className="flex items-center gap-2 text-zinc-500 text-[10px] font-black tracking-[0.15em] uppercase">
+              <AlertTriangle className="w-3 h-3 text-rose-500" /> Task Failure Rate
            </div>
-           <div className={`absolute right-0 bottom-0 top-0 w-16 bg-gradient-to-l ${metrics.failureRate > 20 ? 'from-rose-500/10' : 'from-blue-500/10'} to-transparent`}></div>
+           <div className="flex items-baseline gap-2">
+              <span className={`text-3xl font-bold tracking-tighter ${metrics.failureRate > 20 ? 'text-rose-400' : 'text-white'}`}>{metrics.failureRate}%</span>
+              <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-wider italic">Impact Risk</span>
+           </div>
+           <div className={`absolute -right-4 -bottom-4 w-24 h-24 rounded-full blur-[40px] opacity-20 transition-all group-hover:opacity-40 ${metrics.failureRate > 20 ? 'bg-rose-500' : 'bg-blue-500'}`}></div>
         </div>
-        <div className="glass-panel p-4 rounded-xl flex flex-col gap-1 relative overflow-hidden">
-           <div className="text-zinc-400 text-xs font-bold tracking-wider uppercase">Auto-Delegation</div>
-           <div className="flex items-end gap-2">
-              <span className="text-2xl font-bold text-white">{metrics.assignmentRate}%</span>
-              <span className="text-emerald-400 text-xs font-medium mb-1">assigned</span>
+        
+        <div className="glass-panel p-5 rounded-2xl flex flex-col gap-2 relative overflow-hidden group">
+           <div className="flex items-center gap-2 text-zinc-500 text-[10px] font-black tracking-[0.15em] uppercase">
+              <CheckCircle className="w-3 h-3 text-emerald-500" /> Auto-Delegation
            </div>
-           <div className="absolute right-0 bottom-0 top-0 w-16 bg-gradient-to-l from-emerald-500/10 to-transparent"></div>
+           <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-bold tracking-tighter text-white">{metrics.assignmentRate}%</span>
+              <span className="text-emerald-500/80 text-[10px] font-bold uppercase tracking-wider italic font-mono">assigned</span>
+           </div>
+           <div className="absolute -right-4 -bottom-4 w-24 h-24 rounded-full blur-[40px] opacity-20 bg-emerald-500 transition-all group-hover:opacity-40"></div>
         </div>
-        <div className="glass-panel p-4 rounded-xl flex flex-col gap-1 relative overflow-hidden">
-           <div className="text-zinc-400 text-xs font-bold tracking-wider uppercase">Processing Time</div>
-           <div className="flex items-end gap-2">
-              <span className="text-2xl font-bold text-white">{duration}s</span>
-              <span className="text-blue-400 text-xs font-medium mb-1">Real-time</span>
+
+        <div className="glass-panel p-5 rounded-2xl flex flex-col gap-2 relative overflow-hidden group">
+           <div className="flex items-center gap-2 text-zinc-500 text-[10px] font-black tracking-[0.15em] uppercase">
+              <Clock className="w-3 h-3 text-blue-500" /> Processing Time
            </div>
-           <div className="absolute right-0 bottom-0 top-0 w-16 bg-gradient-to-l from-blue-500/10 to-transparent"></div>
+           <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-bold tracking-tighter text-white">{duration}s</span>
+              <span className="text-blue-400/80 text-[10px] font-bold uppercase tracking-wider italic font-mono">Real-time</span>
+           </div>
+           <div className="absolute -right-4 -bottom-4 w-24 h-24 rounded-full blur-[40px] opacity-20 bg-blue-500 transition-all group-hover:opacity-40"></div>
         </div>
-        <div className="glass-panel p-4 rounded-xl flex flex-col gap-1 relative overflow-hidden">
-           <div className="text-zinc-400 text-xs font-bold tracking-wider uppercase">AI Confidence</div>
-           <div className="flex items-end gap-2">
-              <span className="text-2xl font-bold text-white">{metrics.avgConfidence}%</span>
-              <span className="text-purple-400 text-xs font-medium mb-1">Accuracy</span>
+
+        <div className="glass-panel p-5 rounded-2xl flex flex-col gap-2 relative overflow-hidden group">
+           <div className="flex items-center gap-2 text-zinc-500 text-[10px] font-black tracking-[0.15em] uppercase">
+              <Activity className="w-3 h-3 text-purple-500" /> AI Confidence
            </div>
-           <div className="absolute right-0 bottom-0 top-0 w-16 bg-gradient-to-l from-purple-500/10 to-transparent"></div>
+           <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-bold tracking-tighter text-white">{metrics.avgConfidence}%</span>
+              <span className="text-purple-400/80 text-[10px] font-bold uppercase tracking-wider italic font-mono">Accuracy</span>
+           </div>
+           <div className="absolute -right-4 -bottom-4 w-24 h-24 rounded-full blur-[40px] opacity-20 bg-purple-500 transition-all group-hover:opacity-40"></div>
         </div>
       </div>
 
@@ -252,39 +271,45 @@ export default function Home() {
           
           {/* Input Panel */}
           <div className="glass-panel p-6 rounded-2xl flex flex-col gap-4 relative overflow-hidden group">
-           <div className="flex items-center justify-between font-medium mb-1 relative z-10">
-              <div className="flex items-center gap-2 text-blue-400">
-                <FileText className="w-5 h-5" />
-                Meeting Transcript
+           <div className="flex items-center justify-between font-bold mb-3 relative z-10 px-1">
+              <div className="flex items-center gap-2 text-blue-400 text-xs tracking-widest uppercase">
+                <FileText className="w-4 h-4" />
+                Meeting context
               </div>
-               <div>
-                 <input type="file" id="audio-upload" className="hidden" accept="audio/*, .m4a" onChange={handleAudioUpload}/>
-                 <label htmlFor="audio-upload" className="cursor-pointer text-xs font-semibold bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-lg border border-white/10 text-zinc-300 flex items-center gap-2 transition-all mt-1">
-                   {isUploading ? <Loader2 className="w-3 h-3 animate-spin text-blue-400"/> : <Mic className="w-4 h-4 text-zinc-400"/>}
-                   {isUploading ? "Gemini is processing audio..." : "Upload Audio"}
-                 </label>
-               </div>
+              <div className="flex gap-2">
+                <input type="file" id="audio-upload" className="hidden" accept="audio/*, .m4a" onChange={handleAudioUpload}/>
+                <label htmlFor="audio-upload" className={`cursor-pointer text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl border transition-all flex items-center gap-2 ${isUploading ? 'bg-blue-500/10 border-blue-500/30 text-blue-400' : 'bg-white/5 hover:bg-white/10 border-white/10 text-zinc-400'}`}>
+                  {isUploading ? <Loader2 className="w-3 h-3 animate-spin"/> : <Mic className="w-3 h-3"/>}
+                  {isUploading ? "Processing..." : "Upload Audio"}
+                </label>
+              </div>
            </div>
            
-           <textarea 
-              value={transcript}
-              onChange={e => setTranscript(e.target.value)}
-              className="w-full h-32 bg-black/40 border border-white/5 rounded-xl p-4 text-sm resize-none focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all text-zinc-300 placeholder-zinc-600"
-              placeholder="Paste meeting transcript here to extract tasks..."
-            />
+           <div className="relative group/textarea">
+             <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl blur opacity-0 group-focus-within/textarea:opacity-100 transition duration-500"></div>
+             <textarea 
+                value={transcript}
+                onChange={e => setTranscript(e.target.value)}
+                className="w-full h-32 bg-black/60 border border-white/5 rounded-xl p-5 text-sm resize-none focus:outline-none focus:border-blue-500/40 transition-all text-zinc-300 placeholder-zinc-700 relative z-10 font-medium leading-relaxed"
+                placeholder="Paste meeting transcript here..."
+              />
+            </div>
             <button 
               onClick={startWorkflow}
               disabled={!transcript.trim() || workflowStatus === 'starting' || workflowStatus === 'running'}
-              className={`w-full py-4 rounded-xl flex items-center justify-center gap-3 font-semibold text-sm transition-all shadow-lg mt-2
+              className={`w-full py-4 rounded-2xl flex items-center justify-center gap-3 font-black text-xs uppercase tracking-[0.2em] transition-all relative overflow-hidden group/btn
                 ${(!transcript.trim() || workflowStatus === 'starting' || workflowStatus === 'running') 
-                  ? 'bg-white/5 text-zinc-500 cursor-not-allowed' 
-                  : 'bg-blue-600 hover:bg-blue-500 text-white hover:shadow-blue-500/20'}
+                  ? 'bg-white/5 text-zinc-600 cursor-not-allowed border border-white/5' 
+                  : 'bg-blue-600 hover:bg-blue-500 text-white shadow-[0_0_30px_rgba(59,130,246,0.3)] hover:shadow-[0_0_40px_rgba(59,130,246,0.5)] border border-blue-400/30'}
               `}
             >
               {workflowStatus === 'starting' || workflowStatus === 'running' ? (
-                <><Loader2 className="w-5 h-5 animate-spin" /> {workflowStatus === 'running' ? 'Executing Workflow...' : 'Starting...'}</>
+                <><Loader2 className="w-4 h-4 animate-spin" /> {workflowStatus === 'running' ? 'Active Execution' : 'Initializing'}</>
               ) : (
-                <><Play className="w-5 h-5 fill-current" /> Extract & Execute</>
+                <>
+                  <Play className="w-4 h-4 fill-current transition-transform group-hover/btn:scale-110" /> 
+                  Orchestrate Workflow
+                </>
               )}
             </button>
             <div className="flex items-center justify-between text-xs text-zinc-400">
@@ -296,10 +321,15 @@ export default function Home() {
           </div>
 
           {/* Logs Panel */}
-          <div className="glass-panel rounded-2xl p-5 flex flex-col flex-1 overflow-hidden">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2 text-zinc-300 font-semibold text-sm uppercase tracking-wider">
-                <Server className="w-4 h-4 text-purple-400" /> Agent Orchestration Logs
+          <div className="glass-panel rounded-2xl p-6 flex flex-col flex-1 overflow-hidden relative">
+            <div className="flex items-center justify-between mb-5 relative z-10 px-1">
+              <div className="flex items-center gap-2 text-zinc-400 font-black text-[10px] uppercase tracking-[0.2em]">
+                <Server className="w-3.5 h-3.5 text-purple-400 shadow-[0_0_10px_rgba(167,139,250,0.5)]" /> Agent Orchestration Logs
+              </div>
+              <div className="flex gap-1">
+                <div className="w-1 h-1 rounded-full bg-zinc-700"></div>
+                <div className="w-1 h-1 rounded-full bg-zinc-700"></div>
+                <div className="w-1 h-1 rounded-full bg-zinc-700"></div>
               </div>
             </div>
             
@@ -338,13 +368,16 @@ export default function Home() {
 
         {/* Right Column: Active Task Execution */}
         <div className="lg:col-span-7 flex flex-col h-full">
-          <div className="glass-panel rounded-2xl p-5 h-full flex flex-col">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2 text-zinc-300 font-semibold text-sm uppercase tracking-wider">
-                <CheckCircle className="w-4 h-4 text-emerald-400" /> Assigned Action Items
+          <div className="glass-panel rounded-2xl p-6 h-full flex flex-col relative overflow-hidden">
+            {/* Background Decoration */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-[100px] -mr-32 -mt-32 rounded-full"></div>
+            
+            <div className="flex items-center justify-between mb-8 relative z-10 px-1">
+              <div className="flex items-center gap-2 text-zinc-400 font-black text-[10px] uppercase tracking-[0.2em]">
+                <CheckCircle className="w-4 h-4 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.5)]" /> Assigned Action Items
               </div>
-              <div className="text-sm font-medium text-zinc-400 bg-white/5 px-3 py-1 rounded-full border border-white/5">
-                {tasks.length} Tasks Tracked
+              <div className="text-[10px] font-black text-zinc-400 bg-white/5 px-4 py-1.5 rounded-full border border-white/5 uppercase tracking-widest shadow-inner">
+                {tasks.length} {tasks.length === 1 ? 'Task' : 'Tasks'} Detected
               </div>
             </div>
             
@@ -361,49 +394,61 @@ export default function Home() {
                     return (
                       <motion.div 
                         key={t.id}
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        initial={{ opacity: 0, y: 15, scale: 0.98 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                        className="bg-black/40 border border-white/10 rounded-xl p-5 flex flex-col gap-4 relative overflow-hidden group"
+                        whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                        className="bg-black/40 border border-white/5 rounded-2xl p-6 flex flex-col gap-5 relative overflow-hidden group/card shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
                       >
-                        {/* Decorative gradient for priority */}
-                        <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl -mr-10 -mt-10 opacity-20 transition-all ${
-                          t.priority === 'high' ? 'bg-rose-500' : t.priority === 'medium' ? 'bg-amber-500' : 'bg-blue-500'
+                        {/* Status Pulse Glow */}
+                        <div className={`absolute -right-12 -top-12 w-24 h-24 rounded-full blur-[40px] opacity-10 transition-all duration-700 group-hover/card:opacity-30 ${
+                          t.status === 'completed' ? 'bg-emerald-500' : t.status === 'executing' ? 'bg-blue-500' : 'bg-rose-500'
                         }`} />
                         
-                        <div className="flex items-start justify-between relative z-10 gap-2">
-                          <h3 className="font-medium text-zinc-200 leading-snug">{t.task_description}</h3>
+                        <div className="flex items-start justify-between relative z-10 gap-4">
+                          <h3 className="font-semibold text-zinc-100 leading-relaxed text-sm group-hover/card:text-white transition-colors">
+                            {t.task_description}
+                          </h3>
                         </div>
   
-                        {/* AI Explainability Trace */}
+                        {/* AI Confidence Gauge/Bar */}
                         {t.confidence && (
-                          <div className="flex flex-col gap-1 mt-1 p-3 bg-black/50 border border-white/5 rounded-lg relative z-10">
-                            <div className="flex justify-between items-center text-xs">
-                               <span className="text-zinc-500 font-semibold tracking-wider uppercase">AI Confidence Score</span>
-                               <span className={parseFloat(t.confidence) > 0.8 ? "text-emerald-400 font-mono" : "text-amber-400 font-mono"}>
-                                 {Math.round(parseFloat(t.confidence) * 100)}%
-                               </span>
-                            </div>
-                            <div className="text-xs text-zinc-400 leading-relaxed border-t border-white/5 pt-2 mt-1 italic">
-                               &quot;{t.reason}&quot;
-                            </div>
+                          <div className="relative z-10 pt-2 pb-1 border-t border-white/5">
+                             <div className="flex justify-between items-center mb-2">
+                                <span className="text-[9px] text-zinc-500 font-black tracking-widest uppercase">AI Strategic Alignment</span>
+                                <span className={`text-[10px] font-black font-mono ${parseFloat(t.confidence) > 0.8 ? "text-emerald-400" : "text-amber-400"}`}>
+                                  {Math.round(parseFloat(t.confidence) * 100)}%
+                                </span>
+                             </div>
+                             <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden shadow-inner flex">
+                                <motion.div 
+                                  initial={{ width: 0 }}
+                                  animate={{ width: `${parseFloat(t.confidence) * 100}%` }}
+                                  transition={{ duration: 1, ease: "easeOut" }}
+                                  className={`h-full rounded-full shadow-[0_0_8px_rgba(59,130,246,0.3)] ${
+                                    parseFloat(t.confidence) > 0.8 ? 'bg-gradient-to-r from-emerald-600 to-emerald-400' : 'bg-gradient-to-r from-amber-600 to-amber-400'
+                                  }`}
+                                />
+                             </div>
+                             <p className="text-[9px] text-zinc-500 leading-relaxed mt-3 italic bg-white/5 p-2 rounded-lg border border-white/5 font-medium line-clamp-2 hover:line-clamp-none transition-all">
+                                &ldquo;{t.reason}&quot;
+                             </p>
                           </div>
                         )}
                         
-                        <div className="flex items-center justify-between mt-auto pt-2 relative z-10">
-                          <div className="flex items-center gap-2">
-                            <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-xs font-bold text-white shadow-lg">
+                        <div className="flex items-center justify-between mt-auto pt-4 relative z-10 border-t border-white/5">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-zinc-800 to-zinc-900 border border-white/10 flex items-center justify-center text-xs font-black text-blue-400 shadow-lg group-hover/card:scale-110 transition-transform">
                               {t.owner ? t.owner.charAt(0).toUpperCase() : '?'}
                             </div>
                             <div className="flex flex-col">
-                              <span className="text-xs text-zinc-500 font-medium tracking-wide uppercase">Owner</span>
-                              <span className="text-sm text-zinc-300">{t.owner || 'Unassigned'}</span>
+                              <span className="text-[8px] text-zinc-500 font-extrabold tracking-widest uppercase">Assignment</span>
+                              <span className="text-xs text-zinc-300 font-bold group-hover/card:text-blue-200 transition-colors uppercase tracking-tight">{t.owner || 'Unassigned'}</span>
                             </div>
                           </div>
                           
-                          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${getStatusColor(t.status)} text-xs font-semibold tracking-wide uppercase shadow-sm`}>
-                            {getStatusIcon(t.status)}
-                            {t.status}
+                          <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border-t border-white/5 shadow-inner transition-all duration-500 ${getStatusColor(t.status)}`}>
+                            <span className="w-4">{getStatusIcon(t.status)}</span>
+                            <span className="text-[10px] font-black tracking-widest uppercase">{t.status}</span>
                           </div>
                         </div>
   
