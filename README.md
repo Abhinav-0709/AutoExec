@@ -9,7 +9,69 @@ The system follows a directed acyclic graph (DAG) structure, separating concerns
 - **Executor Agent**: Performs the heavy lifting (simulated CRM updates/real email dispatch via Resend).
 - **Monitor Agent**: A safety governor that handles real-time execution health checks.
 - **Escalation Agent**: Implements "Self-Healing" by routing failed tasks for retry or human review.
-- **Verifier/Notifier Agents**: Validates output quality and notifies stakeholders.
+- **Verifier Agent**: Conducts a final QA check on task outputs.
+- **Notifier Agent**: Validates output quality and notifies stakeholders.
+
+## 📊 System Architecture & Agent Flow
+
+The following diagram illustrates the autonomous decision-making loop and the multi-agent orchestration managed by **LangGraph**.
+
+```mermaid
+graph TD
+    A[Audio/Transcript Input] --> B(Extractor Agent)
+    B -->|Context & Decisions| C(Planner Agent)
+    C -->|Structured Plan| D{Approval Mode}
+    
+    D -->|Manual| E[Human Approval]
+    D -->|Auto| F(Executor Agent)
+    E -->|Approved| F
+    
+    F -->|Result| G(Monitor Agent)
+    G -->|Failure/Error| H(Escalation Agent)
+    H -->|Recovery| F
+    G -->|Success| I(Verifier Agent)
+    
+    I --> J(Notifier Agent)
+    J --> K[Final Output / Email Sent]
+
+    subgraph "External Integrations"
+        L[Gemini File API] -.-> B
+        M[Resend API] -.-> F
+        N[SQLAlchemy DB] -.-> G
+    end
+
+    style B fill:#3b82f6,stroke:#fff,stroke-width:2px,color:#fff
+    style C fill:#3b82f6,stroke:#fff,stroke-width:2px,color:#fff
+    style F fill:#10b981,stroke:#fff,stroke-width:2px,color:#fff
+    style G fill:#f59e0b,stroke:#fff,stroke-width:2px,color:#fff
+    style H fill:#ef4444,stroke:#fff,stroke-width:2px,color:#fff
+```
+
+### 🤖 Agent Roles & Communication
+1.  **Extractor Agent (Ingestion)**: 
+    - **Role**: Context Window Optimization.
+    - **Logic**: Filters noise from transcripts and identifies high-intent language using the Gemini 2.5 Flash `reasoning` engine.
+2.  **Planner Agent (Strategy)**: 
+    - **Role**: Task Decomposition.
+    - **Logic**: Maps decisions to owners and priorities. Communicates via the `PlannedTask` Pydantic schema to ensure downstream type safety.
+3.  **Executor Agent (Action)**: 
+    - **Role**: External Integration Hub.
+    - **Logic**: Interfaces with the **Resend API** for real-world dispatch. It updates the database in real-time to provide UI feedback.
+4.  **Monitor Agent (Guardrail)**: 
+    - **Role**: Quality Assurance & Feedback.
+    - **Logic**: Polling task status and monitoring for API exceptions or logic-level failures.
+5.  **Escalation Agent (Recovery)**: 
+    - **Role**: Self-Healing Logic.
+    - **Logic**: Implements back-off and retry strategies. It can also "interrupt" the flow to request human expert intervention if recovery fails.
+
+### 🛠️ Tool Integrations & Error Handling
+- **Gemini File API**: Used for efficient processing of large audio files (.m4a, .mp3). 
+  - *Error Handling*: Implements a **Wait Loop** that polls the `genai.get_file()` status until the state is `ACTIVE`.
+- **SQLAlchemy (Async)**: Provides the persistence layer for the `Audit Trail`.
+  - *Error Handling*: Uses async session management to prevent thread-blocking during long AI inference tasks.
+- **Msgpack Serialization**: Customized via `LANGCHAIN_CHECKPOINT_ALLOWED_MSGPACK_MODULES` to support the serialization of complex Pydantic models between graph nodes.
+
+---
 
 ## 🛠️ Tech Stack
 - **Backend**: FastAPI, SQLAlchemy (Async), LangGraph, Pydantic, SQLite.
