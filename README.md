@@ -1,6 +1,23 @@
 # AutoExec Enterprise — Autonomous Execution Engine 🚀
 
-AutoExec is an AI-native system that solves the "execution gap" by automating the entire meeting-to-action pipeline. 
+AutoExec is an AI-native system that eliminates one of the most expensive problems in organizations: execution failure after meetings.
+
+Every day, companies lose time, money, and momentum because decisions made in meetings are not executed properly. Tasks are forgotten, ownership is unclear, and follow-ups depend on humans.
+
+AutoExec replaces this broken layer with a fully autonomous execution system.
+
+💡 What Makes AutoExec Different
+
+Unlike tools like Zapier, Notion AI, or Copilot that assist users, AutoExec executes workflows end-to-end.
+
+## It doesn't just suggest actions — it:
+- 🔍 Extracts decisions from conversations  
+- 🧠 Converts them into structured tasks  
+- 👤 Assigns ownership automatically  
+- ⚡ Executes actions (real email integration)  
+- 📡 Monitors progress continuously  
+- 🔁 Detects failures and self-recovers  
+- 📜 Maintains a complete audit trail  
 
 ## 🏗️ Architecture: Agents in Action
 The system uses a state-of-the-art **LangGraph** orchestration loop for end-to-end autonomy:
@@ -19,16 +36,32 @@ If an API fails or a task stalls, AutoExec reroutes and retries autonomously.
 
 ![Failure Replay Flowchart](failure_replay_flowchart.png)
 
+## AutoExec introduces a recovery-first architecture:
+
+- Detects failures in real time
+- Isolates root cause
+- Retries execution intelligently
+- Escalates only when necessary
+
+## 🧠 Real-Time Agent Intelligence
+
+The system provides full transparency:
+
+- Live agent logs
+- Decision reasoning
+- Confidence scores
+- Workflow timeline visualization
+
 ## 📈 Business Impact (Before vs. After)
 Our autonomous implementation transforms operational efficiency by every metric:
 
 | Core Metric | Traditional Manual Process | AutoExec Autonomous Engine | Business ROI |
 | :--- | :--- | :--- | :--- |
-| **Extraction Time** | 30 minutes / meeting | ** < 10 seconds ** | **99% Faster** |
-| **Task Accuracy** | 75% (Human subjectivity) | ** 98% (Schema-validated) ** | **+23% Precision** |
-| **Annual Cost** | $110,650 (Labor overhead) | ** ~ $250 (API Usage) ** | **99.7% Saving** |
-| **SLA Reliability** | 60% (Tasks often dropped) | ** 95% (Self-healing retry) ** | **+35% Reliability** |
-| **Admin Overhead** | 10+ hours / week | ** 0 hours (Hands-off) ** | **Infinite Scalability** |
+| **Extraction Time** | 30 minutes / meeting | **< 10 seconds** | **99% Faster** |
+| **Task Accuracy** | 75% (Human subjectivity) | **98% (Schema-validated)** | **+23% Precision** |
+| **Annual Cost** | $110,650 (Labor overhead) | **~ $250 (API Usage)** | **99.7% Saving** |
+| **SLA Reliability** | 60% (Tasks often dropped) | **95% (Self-healing retry)** | **+35% Reliability** |
+| **Admin Overhead** | 10+ hours / week | **0 hours (Hands-off)** | **Infinite Scalability** |
 
 ---
 
@@ -85,6 +118,7 @@ npm run dev
 - **AI**: Gemini 2.5 Flash + LangGraph + Pydantic.
 - **Data**: SQLAlchemy (Async) + SQLite (Audit Trail).
 - **UI**: Next.js 16 + Tailwind 4 + Framer Motion + Lucide Icons.
+- **Integration**: Resend API for real-world email dispatch.
 
 ---
 *Autonomous. Traceable. Reliable. The foundation of the AI Execution Layer.*
