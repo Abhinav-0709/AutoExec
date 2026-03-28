@@ -121,4 +121,29 @@ npm run dev
 - **Integration**: Resend API for real-world email dispatch.
 
 ---
+
+## 📜 Commit History
+
+- **360aac8** updated the readme file
+- **764a06b** docs: finalize clear instructions and troubleshooting guide  
+- **484ff11** docs: final polish and business model refinement  
+- **304fab5** docs: finalize README with static high-quality visuals  
+- **480cb25** docs: add static failure replay flowchart image  
+- **21faa03** docs: add quantified business impact and ROI analysis  
+- **adef854** docs: use static image for architecture diagram  
+- **e6a8658** docs: add static system architecture diagram image  
+- **dc94fca** docs: add architecture diagram and agent roles  
+- **72635ec** docs: add comprehensive README with architecture/setup  
+- **5321b9c** fix: switch to gemini-2.5-flash and finalize build  
+- **f46ce49** chore: add model diagnosis and testing scripts  
+- **83a690c** feat: design responsive dashboard (Lucide/Framer Motion)  
+- **0318b3a** style: add global styles and root layout configuration  
+- **dee9447** feat: implement LangGraph agent orchestration logic  
+- **e90a063** feat: initial FastAPI server setup with basic endpoints  
+- **be89a9f** feat: add database operations and initialization scripts  
+- **ac30c2f** feat: implement database connection and ORM models  
+- **76f182f** Initial commit: environment and ignore setup
+
+---
 *Autonomous. Traceable. Reliable. The foundation of the AI Execution Layer.*
+
